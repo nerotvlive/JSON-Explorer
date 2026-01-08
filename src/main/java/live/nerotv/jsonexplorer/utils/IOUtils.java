@@ -1,4 +1,4 @@
-package live.nerotv.json_explorer.utils;
+package live.nerotv.jsonexplorer.utils;
 
 import live.nerotv.Main;
 
@@ -15,7 +15,7 @@ public class IOUtils {
         try {
             return getContent(catchForbidden(url));
         } catch (Exception e) {
-            Main.getLogger().error("Couldn't get content of "+url+": "+e.getMessage());
+            Main.getLogger().err("Couldn't get content of "+url+": "+e.getMessage());
             return null;
         }
     }
@@ -32,7 +32,7 @@ public class IOUtils {
             enclosedReader.close();
             rbc.close();
         } catch (Exception e) {
-            Main.getLogger().error("Couldn't get content of "+remote+": "+e.getMessage());
+            Main.getLogger().err("Couldn't get content of "+remote+": "+e.getMessage());
             return null;
         }
         return sb.toString();

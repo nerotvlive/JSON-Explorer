@@ -1,8 +1,9 @@
-package live.nerotv.json_explorer;
+package live.nerotv.jsonexplorer;
 
 import com.google.gson.*;
 import live.nerotv.Main;
-import live.nerotv.json_explorer.utils.IOUtils;
+import live.nerotv.jsonexplorer.frame.ExplorerFrame;
+import live.nerotv.jsonexplorer.utils.IOUtils;
 
 import javax.swing.*;
 import java.io.File;
@@ -16,17 +17,40 @@ import java.nio.charset.StandardCharsets;
 
 public class APIExplorer {
 
+    private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private OldExplorerFrame old_frame;
     private ExplorerFrame frame;
     private String apiKey;
 
-    public APIExplorer(String apiKey) {
+    public APIExplorer(String apiKey, boolean oldFrame) {
         this.apiKey = apiKey;
-        SwingUtilities.invokeLater(()->{
-            frame = new ExplorerFrame();
-            frame.initialise(this);
-            frame.setSize(1000,700);
+        if(oldFrame) {
+            openOld();
+        } else {
+            open();
+        }
+    }
+
+    public void open() {
+        SwingUtilities.invokeLater(() -> {
+            frame = new ExplorerFrame(this);
+            frame.setSize(1000, 700);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);
+        });
+    }
+
+    public void openOld() {
+        SwingUtilities.invokeLater(() -> {
+            if(old_frame != null) {
+                old_frame.dispose();
+                old_frame = null;
+            }
+            old_frame = new OldExplorerFrame();
+            old_frame.initialise(this);
+            old_frame.setSize(1000, 700);
+            old_frame.setLocationRelativeTo(null);
+            old_frame.setVisible(true);
         });
     }
 
@@ -35,10 +59,9 @@ public class APIExplorer {
     }
 
     @SuppressWarnings("all")
-    private String formatJson(String input) {
+    public static String formatJson(String input) {
         JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = jsonParser.parse(input).getAsJsonObject();
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(jsonObject);
     }
 
@@ -57,31 +80,31 @@ public class APIExplorer {
         }
     }
 
-    public void makeRequest(String urlString) {
-        frame.getButton().setText("Making request...");
-        frame.getButton().setEnabled(false);
+    public void makeOldRequest(String urlString) {
+        old_frame.getButton().setText("Making request...");
+        old_frame.getButton().setEnabled(false);
         try {
-            frame.getOutputArea().setText("Resolving...");
+            old_frame.getOutputArea().setText("Resolving...");
             if(urlString.startsWith("http")) {
                 URI uri = encode(urlString);
                 URL url = uri.toURL();
                 String urlString_ = urlString.toLowerCase().replace("https://", "").replace("http://", "");
                 if (urlString_.startsWith("api.curseforge.com")) {
-                    frame.getOutputArea().setText(formatJson(resolveCurseforgeRequest(url)));
+                    old_frame.getOutputArea().setText(formatJson(resolveCurseforgeRequest(url)));
                 } else {
-                    frame.getOutputArea().setText(formatJson(resolveRequest(url)));
+                    old_frame.getOutputArea().setText(formatJson(resolveRequest(url)));
                 }
             } else {
                 String urlString_ = urlString.replace("file:///", "").replace("file://", "");
-                frame.getOutputArea().setText(resolveLocalRequest(urlString_));
+                old_frame.getOutputArea().setText(resolveLocalRequest(urlString_));
             }
-            frame.getButton().setText("Make request");
-            frame.getButton().setEnabled(true);
+            old_frame.getButton().setText("Make request");
+            old_frame.getButton().setEnabled(true);
         } catch (Exception e) {
-            Main.getLogger().error("Bad request: "+e.getMessage());
-            frame.getOutputArea().setText("Please input a valid URL to make a request.");
-            frame.getButton().setText("Make request");
-            frame.getButton().setEnabled(true);
+            Main.getLogger().err("Bad request: "+e.getMessage());
+            old_frame.getOutputArea().setText("Please input a valid URL to make a request.");
+            old_frame.getButton().setText("Make request");
+            old_frame.getButton().setEnabled(true);
         }
     }
 
@@ -97,7 +120,7 @@ public class APIExplorer {
             return IOUtils.getContent(connection.getInputStream());
         } catch (Exception e) {
             String error = "Couldn't resolve request: "+e.getMessage();
-            Main.getLogger().error(error);
+            Main.getLogger().err(error);
             return error;
         } finally {
             if(connection != null) {
@@ -130,12 +153,40 @@ public class APIExplorer {
             return IOUtils.getContent(connection.getInputStream());
         } catch (Exception e) {
             String error = "Couldn't resolve CurseForge request: "+e.getMessage();
-            Main.getLogger().error(error);
+            Main.getLogger().err(error);
             return error;
         } finally {
             if(connection != null) {
                 connection.disconnect();
             }
         }
+    }
+
+    public String resolveXAPIKeyRequest(URL url) {
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection)url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setInstanceFollowRedirects(true);
+            connection.setUseCaches(false);
+            connection.setRequestProperty("Accept", "application/json");
+            connection.setRequestProperty("x-api-key", apiKey);
+            return IOUtils.getContent(connection.getInputStream());
+        } catch (Exception e) {
+            Main.getLogger().err(e.getMessage(),true);
+            return e.getMessage();
+        } finally {
+            if(connection != null) {
+                connection.disconnect();
+            }
+        }
+    }
+
+    public static Gson getGson() {
+        return gson;
+    }
+
+    public boolean useKey() {
+        return apiKey != null;
     }
 }

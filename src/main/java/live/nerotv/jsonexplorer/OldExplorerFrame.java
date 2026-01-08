@@ -1,4 +1,4 @@
-package live.nerotv.json_explorer;
+package live.nerotv.jsonexplorer;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -7,7 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
 
-public class ExplorerFrame extends JFrame {
+public class OldExplorerFrame extends JFrame {
 
     private JTextArea inputField;
     private JButton button;
@@ -36,7 +36,7 @@ public class ExplorerFrame extends JFrame {
         GridBagConstraints gbcButton = new GridBagConstraints();
         gbcButton.gridx = 1;
         gbcButton.gridy = 0;
-        button.addActionListener(e -> instance.makeRequest(inputField.getText()));
+        button.addActionListener(e -> instance.makeOldRequest(inputField.getText()));
         content.add(button, gbcButton);
 
         outputArea = new JTextArea("No output yet...");
@@ -61,11 +61,11 @@ public class ExplorerFrame extends JFrame {
         gbcScrollPane.weightx = 1.0;
         gbcScrollPane.weighty = 1.0;
         content.add(scrollPane, gbcScrollPane);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         add(content);
 
         pack();
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void showSearchDialog() {
