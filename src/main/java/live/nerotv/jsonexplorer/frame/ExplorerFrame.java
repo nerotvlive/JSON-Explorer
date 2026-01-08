@@ -38,11 +38,7 @@ public class ExplorerFrame extends ApexFrame {
         initContent();
 
         setTitleColors(Color.black, Color.white);
-        if(instance.useKey()) {
-            setTitle("API key set");
-        } else {
-            super.setTitle("JSON Explorer");
-        }
+        super.setTitle("JSON Explorer");
     }
 
     private void initToolbar() {

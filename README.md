@@ -1,2 +1,5 @@
-# JSON-Explorer ``v2024.2.2`` `Java 21`
-A simple program to explore json api endpoints (or just simple json files).
+# JSON-Explorer ``v2.25.0`` `Java 25`
+A program created to VIEW JSON files online or local.
+API Key support.
+
+[Download]()
