@@ -11,7 +11,6 @@ public class Main {
 
     private static ApexLogger logger;
     private static String apiKey;
-    private static APIExplorer explorer;
 
     public static void main(String[] a) {
         logger = new ApexLogger("JSON-Explorer");
@@ -19,7 +18,7 @@ public class Main {
         if (resolveArguments(a)) {
             logger.log("Starting JSON-Explorer...");
             initDesktop();
-            explorer = new APIExplorer(apiKey);
+            APIExplorer explorer = new APIExplorer(apiKey);
             apiKey = null;
         }
     }
@@ -59,9 +58,5 @@ public class Main {
 
     public static ApexLogger getLogger() {
         return logger;
-    }
-
-    public static void setAPIKey(String newApiKey) {
-        explorer.setAPIKey(newApiKey);
     }
 }

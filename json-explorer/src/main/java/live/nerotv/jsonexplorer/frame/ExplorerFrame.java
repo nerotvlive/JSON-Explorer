@@ -8,6 +8,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.net.URI;
 import java.net.URL;
@@ -191,6 +193,23 @@ public class ExplorerFrame extends JFrame {
         homeContent.setBorder(BorderFactory.createMatteBorder(1,0,0,0,Color.darkGray));
 
         home.add(homeContent, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBackground(null);
+        bottomPanel.setBorder(BorderFactory.createEmptyBorder(4,7,4,7));
+        JLabel branding = new JLabel("JSON Explorer 2.17.2 by nerotvlive");
+        branding.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                try {
+                    Desktop.getDesktop().browse(new URI("https://nerotv.live"));
+                } catch (Exception ex) {
+                    Main.getLogger().err("Couldn't open link: "+ex.getMessage(), true);
+                }
+            }
+        });
+        bottomPanel.add(branding,BorderLayout.EAST);
+        home.add(bottomPanel, BorderLayout.SOUTH);
 
         JTextField pathInput = new JTextField();
         pathInput.setBackground(Color.decode("#181818"));

@@ -35,26 +35,6 @@ public class JsonUtility {
         return sb.toString();
     }
 
-    public static JsonObject getObject(String url) {
-        try {
-            HttpURLConnection connection = (HttpURLConnection) new URI(url).toURL().openConnection();
-            connection.setRequestMethod("GET");
-            int responseCode = connection.getResponseCode();
-            if (responseCode == HttpURLConnection.HTTP_OK) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                StringBuilder response = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    response.append(line);
-                }
-                reader.close();
-                return JsonParser.parseString(response.toString()).getAsJsonObject();
-            }
-            connection.disconnect();
-        } catch (Exception ignore) {}
-        return null;
-    }
-
     public static String getFromURL(String urlString) {
         try {
             URL url = new URI(urlString).toURL();
