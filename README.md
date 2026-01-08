@@ -1,4 +1,4 @@
-# JSON-Explorer ``v2.25.0`` `Java 25`
+# JSON-Explorer ``v2.25.1`` `Java 17+`
 A program created to VIEW JSON files online or local.
 API Key support.
 

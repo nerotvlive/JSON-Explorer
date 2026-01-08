@@ -3,8 +3,6 @@ package live.nerotv.jsonexplorer.frame;
 import jnafilechooser.api.JnaFileChooser;
 import live.nerotv.Main;
 import live.nerotv.jsonexplorer.APIExplorer;
-import org.zyneonstudios.apex.utilities.frame.ApexFrame;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -15,7 +13,7 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Objects;
 
-public class ExplorerFrame extends ApexFrame {
+public class ExplorerFrame extends JFrame {
 
     private JMenuBar toolbar;
     private JTabbedPane tabbedPane;
@@ -23,7 +21,6 @@ public class ExplorerFrame extends ApexFrame {
     private JPanel home;
 
     public ExplorerFrame(APIExplorer instance) {
-        super(true);
         this.instance = instance;
 
         getContentPane().setBackground(Color.black);
@@ -46,7 +43,7 @@ public class ExplorerFrame extends ApexFrame {
             toolbar = new JMenuBar();
 
             JButton backButton = new JButton("<");
-            backButton.addActionListener((_)->{
+            backButton.addActionListener((e)->{
                 Component activeTab = tabbedPane.getSelectedComponent();
                 if (activeTab instanceof JsonPanel) {
                     JsonPanel tab = (JsonPanel)activeTab;
@@ -59,7 +56,7 @@ public class ExplorerFrame extends ApexFrame {
             toolbar.add(backButton);
 
             JButton forwardButton = new JButton(">");
-            forwardButton.addActionListener((_)->{
+            forwardButton.addActionListener((e)->{
                 Component activeTab = tabbedPane.getSelectedComponent();
                 if (activeTab instanceof JsonPanel) {
                     JsonPanel tab = (JsonPanel)activeTab;
@@ -87,15 +84,15 @@ public class ExplorerFrame extends ApexFrame {
         JMenu fileMenu = new JMenu("File");
 
         JMenuItem openFile = new JMenuItem("Open File...");
-        openFile.addActionListener((_) -> openFileChooser());
+        openFile.addActionListener((e) -> openFileChooser());
         fileMenu.add(openFile);
 
         JMenuItem loadUrl = new JMenuItem("Load URL...");
-        loadUrl.addActionListener((_) -> openUrlInput());
+        loadUrl.addActionListener((e) -> openUrlInput());
         fileMenu.add(loadUrl);
 
         JMenuItem setXKey = new JMenuItem("Set x-api-key...");
-        setXKey.addActionListener((_) -> setXKey());
+        setXKey.addActionListener((e) -> setXKey());
         fileMenu.add(setXKey);
 
         JMenuItem exitItem = new JMenuItem("Exit");
@@ -122,15 +119,11 @@ public class ExplorerFrame extends ApexFrame {
         JMenu fileMenu = new JMenu("Window");
 
         JMenuItem newWindow = new JMenuItem("New window");
-        newWindow.addActionListener((_) -> instance.open());
+        newWindow.addActionListener((e) -> instance.open());
         fileMenu.add(newWindow);
 
-        JMenuItem oldWindow = new JMenuItem("Open old window");
-        oldWindow.addActionListener((_) -> instance.openOld());
-        fileMenu.add(oldWindow);
-
         JMenuItem exitItem = new JMenuItem("Close window");
-        exitItem.addActionListener(_ -> dispose());
+        exitItem.addActionListener(e -> dispose());
         fileMenu.add(exitItem);
         return fileMenu;
     }
@@ -161,27 +154,27 @@ public class ExplorerFrame extends ApexFrame {
         buttonPanel.setOpaque(false);
 
         JButton openFile = new JButton("View new JSON file...");
-        openFile.addActionListener((_)-> openFileChooser());
+        openFile.addActionListener((e)-> openFileChooser());
 
         JButton openUrl = new JButton("View new JSON url...");
-        openUrl.addActionListener((_)-> openUrlInput());
+        openUrl.addActionListener((e)-> openUrlInput());
 
         JButton newWindow = new JButton("New window");
-        newWindow.addActionListener((_)-> instance.open());
+        newWindow.addActionListener((e)-> instance.open());
 
         JButton setApiKey = new JButton("Set x-api-key...");
-        setApiKey.addActionListener((_)-> setXKey());
+        setApiKey.addActionListener((e)-> setXKey());
 
         JButton exit = new JButton("Exit JSON Explorer");
-        exit.addActionListener((_)-> System.exit(0));
+        exit.addActionListener((e)-> System.exit(0));
 
         JSeparator separator = new JSeparator();
         JButton sourceCode = new JButton("View source code");
-        sourceCode.addActionListener((_)->{
+        sourceCode.addActionListener((e)->{
             try {
                 Desktop.getDesktop().browse(new URI("https://github.com/nerotvlive/json-explorer"));
-            } catch (Exception e) {
-                Main.getLogger().err("Couldn't open link: "+e.getMessage(), true);
+            } catch (Exception ex) {
+                Main.getLogger().err("Couldn't open link: "+ex.getMessage(), true);
             }
         });
 

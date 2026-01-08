@@ -6,27 +6,26 @@
 
     <groupId>live.nerotv</groupId>
     <artifactId>JSON-Explorer</artifactId>
-    <version>2.25.0</version>
+    <version>2.25.1</version>
 
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <repositories>
         <repository>
-            <id>nerofy-releases</id>
-            <name>Nerofy repository</name>
-            <url>https://maven.nrfy.net/releases</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
     <dependencies>
         <dependency>
-            <groupId>org.zyneonstudios.apex</groupId>
-            <artifactId>utilities</artifactId>
-            <version>2.25.0-SNAPSHOT.2</version>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.13.2</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -35,14 +34,34 @@
             <version>3.6.1</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.7</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.steos</groupId>
+            <artifactId>jnafilechooser</artifactId>
+            <version>1.1.2</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>nerofy-releases</id>
+            <name>Nerofy Network Maven repository</name>
+            <url>https://maven.nrfy.net/releases</url>
+        </repository>
+    </distributionManagement>
 
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.0</version>
                 <configuration>
                     <archive>
                         <manifest>
@@ -54,7 +73,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.14.1</version>
                 <configuration>
                     <source>${maven.compiler.source}</source>
                     <target>${maven.compiler.target}</target>
@@ -63,7 +82,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.4</version>
+                <version>3.6.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -71,6 +90,7 @@
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                                     <mainClass>live.nerotv.Main</mainClass>

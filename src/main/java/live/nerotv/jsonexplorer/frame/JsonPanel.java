@@ -1,7 +1,7 @@
 package live.nerotv.jsonexplorer.frame;
 
 import live.nerotv.Main;
-import live.nerotv.jsonexplorer.APIExplorer;
+import live.nerotv.jsonexplorer.utils.JsonUtility;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rsyntaxtextarea.Theme;
@@ -9,7 +9,6 @@ import org.fife.ui.rtextarea.RTextScrollPane;
 import org.fife.ui.rtextarea.SearchContext;
 import org.fife.ui.rtextarea.SearchEngine;
 import org.fife.ui.rtextarea.SearchResult;
-import org.zyneonstudios.apex.utilities.json.GsonUtility;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +52,7 @@ public class JsonPanel extends JPanel {
                     String input = pathInput.getText();
                     if(loadText(input)) {
                         while (history.size() > currentIndex + 1) {
-                            history.removeLast();
+                            history.remove(history.size()-1);
                         }
                         history.add(input);
                         currentIndex++;
@@ -121,7 +120,7 @@ public class JsonPanel extends JPanel {
         textArea = new RSyntaxTextArea(20, 60);
         JButton closeSearch = new JButton("Close");
         closeSearch.setBackground(Color.decode("#1f1f1f"));
-        closeSearch.addActionListener((_)-> closeSearch());
+        closeSearch.addActionListener((e)-> closeSearch());
 
         searchReplacePanel.add(searchPanel);
         searchReplacePanel.add(replacePanel);
@@ -234,7 +233,7 @@ public class JsonPanel extends JPanel {
                     if(parent.getInstance().useKey()) {
                         text = parent.getInstance().resolveXAPIKeyRequest(source);
                     } else {
-                        text = GsonUtility.getFromURL(url);
+                        text = JsonUtility.getFromURL(url);
                     }
                     if(url.contains("/")) {
                         String[] u = url.split("/");
@@ -245,7 +244,7 @@ public class JsonPanel extends JPanel {
                 } else {
                     File file = new File(textUrlOrPath);
                     if(file.exists() && file.isFile()) {
-                        text = GsonUtility.getFromFile(file);
+                        text = JsonUtility.getFromFile(file);
                         name = file.getName();
                     } else {
                         throw new IllegalArgumentException("File does not exist: " + textUrlOrPath);
@@ -255,13 +254,13 @@ public class JsonPanel extends JPanel {
 
             if(history.isEmpty()) {
                 while (history.size() > currentIndex + 1) {
-                    history.removeLast();
+                    history.remove(history.size()-1);
                 }
                 history.add(textUrlOrPath);
                 currentIndex++;
             }
 
-            textArea.setText(APIExplorer.formatJson(text));
+            textArea.setText(parent.getInstance().formatJson(text));
             textArea.requestFocus();
             pathInput.setText(textUrlOrPath);
             parent.renameTabForPanel(this,name);
@@ -282,7 +281,7 @@ public class JsonPanel extends JPanel {
             currentIndex--;
             return history.get(currentIndex);
         }
-        return history.getFirst();
+        return history.get(0);
     }
 
     public String getNextSource() {
