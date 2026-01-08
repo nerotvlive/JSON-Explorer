@@ -25,7 +25,7 @@ public class ExplorerFrame extends JFrame {
     public ExplorerFrame(APIExplorer instance) {
         this.instance = instance;
 
-        getContentPane().setBackground(Color.black);
+        getContentPane().setBackground(Color.decode("#181818"));
         setLayout(new BorderLayout());
 
         try {
@@ -36,7 +36,7 @@ public class ExplorerFrame extends JFrame {
         initNewTab();
         initContent();
 
-        setTitleColors(Color.black, Color.white);
+        setTitleColors(getContentPane().getBackground(), Color.white);
         super.setTitle("JSON Explorer");
     }
 
@@ -121,7 +121,7 @@ public class ExplorerFrame extends JFrame {
         JMenu fileMenu = new JMenu("Window");
 
         JMenuItem newWindow = new JMenuItem("New window");
-        newWindow.addActionListener((e) -> instance.open());
+        newWindow.addActionListener((e) -> instance.open(this));
         fileMenu.add(newWindow);
 
         JMenuItem exitItem = new JMenuItem("Close window");
@@ -132,7 +132,7 @@ public class ExplorerFrame extends JFrame {
 
     private void initContent() {
         tabbedPane = new JTabbedPane();
-        tabbedPane.setBackground(Color.black);
+        tabbedPane.setBackground(getContentPane().getBackground());
         tabbedPane.addTab("Home",home);
         add(tabbedPane, BorderLayout.CENTER);
     }
@@ -162,7 +162,7 @@ public class ExplorerFrame extends JFrame {
         openUrl.addActionListener((e)-> openUrlInput());
 
         JButton newWindow = new JButton("New window");
-        newWindow.addActionListener((e)-> instance.open());
+        newWindow.addActionListener((e)-> instance.open(this));
 
         JButton setApiKey = new JButton("Set x-api-key...");
         setApiKey.addActionListener((e)-> setXKey());

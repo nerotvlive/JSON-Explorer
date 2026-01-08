@@ -8,6 +8,7 @@ import live.nerotv.Main;
 import live.nerotv.jsonexplorer.frame.ExplorerFrame;
 import live.nerotv.jsonexplorer.utils.JsonUtility;
 import javax.swing.*;
+import java.awt.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -19,14 +20,15 @@ public class APIExplorer {
 
     public APIExplorer(String apiKey) {
         this.apiKey = apiKey;
-        open();
+        open(null);
     }
 
-    public void open() {
+    public void open(Component loc) {
         SwingUtilities.invokeLater(() -> {
             frame = new ExplorerFrame(this);
+            frame.setMinimumSize(new Dimension(720,600));
             frame.setSize(1000, 700);
-            frame.setLocationRelativeTo(null);
+            frame.setLocationRelativeTo(loc);
             frame.setVisible(true);
         });
     }
