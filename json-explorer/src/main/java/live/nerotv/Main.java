@@ -18,7 +18,7 @@ public class Main {
         if (resolveArguments(a)) {
             logger.log("Starting JSON-Explorer...");
             initDesktop();
-            APIExplorer explorer = new APIExplorer(apiKey);
+            new APIExplorer(apiKey);
             apiKey = null;
         }
     }

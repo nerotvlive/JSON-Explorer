@@ -197,7 +197,7 @@ public class ExplorerFrame extends JFrame {
         JPanel bottomPanel = new JPanel(new BorderLayout());
         bottomPanel.setBackground(null);
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(4,7,4,7));
-        JLabel branding = new JLabel("JSON Explorer 2.17.2 by nerotvlive");
+        JLabel branding = new JLabel("JSON Explorer 2.17.3 by nerotvlive");
         branding.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
