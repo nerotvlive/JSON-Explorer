@@ -6,6 +6,7 @@ import live.nerotv.jsonexplorer.APIExplorer;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
@@ -35,6 +36,7 @@ public class ExplorerFrame extends JFrame {
         initToolbar();
         initNewTab();
         initContent();
+        initKeyBindings();
 
         setTitleColors(getContentPane().getBackground(), Color.white);
         super.setTitle("JSON Explorer");
@@ -135,6 +137,30 @@ public class ExplorerFrame extends JFrame {
         tabbedPane.setBackground(getContentPane().getBackground());
         tabbedPane.addTab("Home",home);
         add(tabbedPane, BorderLayout.CENTER);
+    }
+
+    private void initKeyBindings() {
+        Action reloadAction = new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                reloadActiveTab();
+            }
+        };
+        InputMap inputMap = getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_F5, 0), "reloadActiveTab");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx()), "reloadActiveTab");
+        getRootPane().getActionMap().put("reloadActiveTab", reloadAction);
+    }
+
+    private void reloadActiveTab() {
+        Component activeTab = tabbedPane.getSelectedComponent();
+        if (activeTab instanceof JsonPanel) {
+            JsonPanel tab = (JsonPanel) activeTab;
+            String source = tab.getSource();
+            if (source != null && !source.isEmpty()) {
+                tab.loadText(source);
+            }
+        }
     }
 
     public void initNewTab() {

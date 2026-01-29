@@ -203,7 +203,7 @@ public class JsonPanel extends JPanel {
                 }
             }
         };
-        KeyStroke keyStrokeR = KeyStroke.getKeyStroke("control R");
+        KeyStroke keyStrokeR = KeyStroke.getKeyStroke("control H");
         textArea.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(keyStrokeR, "doReplace");
         textArea.getActionMap().put("doReplace", replaceAction);
     }
